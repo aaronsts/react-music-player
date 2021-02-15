@@ -4,6 +4,7 @@ import './styles/app.scss';
 // Adding components
 import Player from './Components/Player';
 import Song from './Components/Song';
+import Util from './util'
 
 
 function App() {
