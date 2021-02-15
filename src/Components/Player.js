@@ -16,18 +16,20 @@ const Player = ({currentSong, isPlaying, setIsPlaying}) => {
            setIsPlaying(!isPlaying);
        }
     }
-
     const timeUpdateHandler = (e) => {
         const current = e.target.currentTime;
         const duration = e.target.duration;
         setSongInfo({... songInfo, currentTime: current, duration }) // duration var has same name so don't need to type it twice
     };
-
     const getTime = (time) => {
         return(
             Math.floor(time / 60) + ":" + ("0" + Math.floor( time % 60 )).slice(-2) // format the seconds to minutes and seconds
         );
     }
+    const dragHandler = (e) => {
+        audioRef.current.currentTime = e.target.value;
+        setSongInfo({...songInfo, currentTime: e.target.value})
+    };
 
     // State
     const [songInfo, setSongInfo] = useState({
@@ -38,7 +40,13 @@ const Player = ({currentSong, isPlaying, setIsPlaying}) => {
         <div className="player">
             <div className="time-control">
                 <p>{getTime(songInfo.currentTime)}</p>
-                <input type='range' />
+                <input 
+                    min={0} 
+                    max={songInfo.duration} 
+                    value={songInfo.currentTime} 
+                    type='range' 
+                    onChange={dragHandler}
+                />
                 <p>{getTime(songInfo.duration)}</p>
             </div>
             <div className="play-control">
@@ -46,7 +54,12 @@ const Player = ({currentSong, isPlaying, setIsPlaying}) => {
                 <FontAwesomeIcon onClick={playSongHandler} className='play' size='2x' icon={faPlay} />
                 <FontAwesomeIcon className='skip-forward' size='2x' icon={faAngleRight} />
             </div>
-            <audio onLoadedMetadata={timeUpdateHandler} onTimeUpdate={timeUpdateHandler} ref={audioRef} src={currentSong.audio}></audio>
+            <audio 
+                onLoadedMetadata={timeUpdateHandler} 
+                onTimeUpdate={timeUpdateHandler} 
+                ref={audioRef} 
+                src={currentSong.audio}
+            ></audio>
         </div>
     );
 }
