@@ -6,6 +6,7 @@ import {
     faAngleRight, 
     faPause
 } from '@fortawesome/free-solid-svg-icons';
+import {playAudio} from '../util';
 
 const Player = ({audioRef, currentSong, isPlaying, setIsPlaying, songInfo, setSongInfo, setCurrentSong, songs, setSongs}) => {
     // UseEffect
@@ -54,6 +55,7 @@ const Player = ({audioRef, currentSong, isPlaying, setIsPlaying, songInfo, setSo
         } else if (direction === 'skip-forward') {
             setCurrentSong(songs[currentIndex + 1] || songs[0]);
         }
+        playAudio(isPlaying, audioRef);
     }
 
     return(
@@ -67,7 +69,7 @@ const Player = ({audioRef, currentSong, isPlaying, setIsPlaying, songInfo, setSo
                     type='range' 
                     onChange={dragHandler}
                 />
-                <p>{getTime(songInfo.duration)}</p>
+                <p>{songInfo.duration ? getTime(songInfo.duration) : '0:00'}</p>
             </div>
             <div className="play-control">
                 <FontAwesomeIcon onClick={() => skipTrackHandler('skip-back')} className='skip-back' size='2x' icon={faAngleLeft} />
