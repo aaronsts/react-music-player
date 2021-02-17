@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
     faPlay, 
@@ -7,7 +7,24 @@ import {
     faPause
 } from '@fortawesome/free-solid-svg-icons';
 
-const Player = ({audioRef, currentSong, isPlaying, setIsPlaying, songInfo, setSongInfo, setCurrentSong, songs}) => {
+const Player = ({audioRef, currentSong, isPlaying, setIsPlaying, songInfo, setSongInfo, setCurrentSong, songs, setSongs}) => {
+    // UseEffect
+        useEffect(() => {
+            const newSongs = songs.map((selectedSong)=> {
+                if(selectedSong.id === currentSong.id){
+                  return{
+                    ...selectedSong,
+                    active: true,
+                  }
+                }else{
+                  return{
+                    ...selectedSong,
+                    active: false,
+                  }
+                }
+              });
+              setSongs(newSongs);
+        },[currentSong]);
 
     // Event handlers
     const playSongHandler = () => {
