@@ -34,18 +34,21 @@
   }
 }
 
-input[type="range"]:foucs {
+input[type="range"]:focus {
   outline: none;
 }
-
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   height: 16px;
   width: 16px;
 }
+input[type="range"]::-moz-range-thumb {
+  -moz-appearance: none;
+  background: transparent;
+  border: none;
+}
 
 .track {
-  background: lightblue;
   width: 100%;
   height: 1rem;
   position: relative;
