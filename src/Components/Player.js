@@ -6,9 +6,8 @@ import {
     faAngleRight, 
     faPause
 } from '@fortawesome/free-solid-svg-icons';
-import {playAudio} from '../util';
 
-const Player = ({audioRef, currentSong, isPlaying, setIsPlaying, songInfo, setSongInfo, setCurrentSong, songs, setSongs}) => {
+const Player = ({audioRef, currentSong, isPlaying, setIsPlaying, songInfo, setSongInfo, setCurrentSong, songs, setSongs, skipTrackHandler}) => {
     // UseEffect
         useEffect(() => {
             const newSongs = songs.map((selectedSong)=> {
@@ -48,27 +47,26 @@ const Player = ({audioRef, currentSong, isPlaying, setIsPlaying, songInfo, setSo
         setSongInfo({...songInfo, currentTime: e.target.value})
     };
 
-    const skipTrackHandler = direction => {
-        let currentIndex = songs.findIndex(song => song.id === currentSong.id);
-        if (direction === 'skip-back'){
-            setCurrentSong(songs[currentIndex - 1] || songs[songs.length-1]);
-        } else if (direction === 'skip-forward') {
-            setCurrentSong(songs[currentIndex + 1] || songs[0]);
-        }
-        playAudio(isPlaying, audioRef);
+    // Add styling
+    const trackAnim = {
+        transform: `translateX(${songInfo.animationPercentage}%)`
     }
 
     return(
         <div className="player">
             <div className="time-control">
                 <p>{getTime(songInfo.currentTime)}</p>
-                <input 
-                    min={0} 
-                    max={songInfo.duration || 0} 
-                    value={songInfo.currentTime} 
-                    type='range' 
-                    onChange={dragHandler}
-                />
+                <div style={{background: `linear-gradient(to-right, ${currentSong.color[0]}, ${currentSong.color[1]})`,}}className="track">
+                    <input 
+                        min={0} 
+                        max={songInfo.duration || 0} 
+                        value={songInfo.currentTime} 
+                        type='range' 
+                        onChange={dragHandler}
+                    />
+                    <div style={trackAnim} className="animate-track"></div>
+                </div>
+                
                 <p>{songInfo.duration ? getTime(songInfo.duration) : '0:00'}</p>
             </div>
             <div className="play-control">
